@@ -65,6 +65,3 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
-
-
---n_episodes 2000 --max_t 1000 --eps_start 1.0 --eps_end 0.01 --eps_decay 0.995 --buffer_size 100000 --batch_size 64 --gamma 0.99 --tau 0.001 --lr 0.0005 --update_every 4
