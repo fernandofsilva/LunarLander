@@ -40,7 +40,7 @@ class Agent:
         self.model_local = QNetwork(state_size, action_size)
         self.model_target = QNetwork(state_size, action_size)
         self.optimizer = tf.keras.optimizers.Adam(learning_rate=lr)
-        self.loss = tf.keras.losses.MeanSquaredError(name="mse")
+        self.loss_fn = tf.keras.losses.MeanSquaredError(name="mse")
         self.tau = tau
         self.update_every = update_every
         self.batch_size = batch_size
@@ -109,19 +109,25 @@ class Agent:
         """
         states, actions, rewards, next_states, dones = experiences
 
+        # Create mask to actions
+        mask = tf.one_hot(actions.reshape(-1), self.action_size)
+
         with tf.GradientTape(persistent=True) as tape:
 
             # Get expected Q values from local model
-            q_expected = self.model_local(states)
+            q_expected = tf.reduce_sum(self.model_local(states) * mask, axis=1, keepdims=True)
 
             # Get max predicted Q values (for next states) from target model
-            q_targets_next = self.model_target(next_states, training=True)
+            q_targets_next = tf.reduce_max(self.model_target(next_states, training=True), axis=1)
 
             # Compute Q targets for current states
-            q_targets = rewards + (self.gamma * q_targets_next * (1 - dones))
+            q_targets = tf.add(
+                rewards, tf.multiply(
+                    self.gamma, q_targets_next, tf.subtract(1.0, dones))
+            )
 
             # Compute loss
-            loss = self.loss(q_expected, q_targets)
+            loss = self.loss_fn(q_expected, q_targets)
 
         # Minimize the loss
         gradients = tape.gradient(loss, self.model_local.trainable_variables)
@@ -199,4 +205,3 @@ class ReplayBuffer:
         dones = np.vstack([e.done for e in experiences if e is not None]).astype(np.uint8)
 
         return states, actions, rewards, next_states, dones
-

@@ -1,5 +1,6 @@
 import numpy as np
 from collections import deque
+import sys
 
 
 def interact(env, agent, n_episodes, max_t, eps_start, eps_end, eps_decay):
@@ -42,17 +43,18 @@ def interact(env, agent, n_episodes, max_t, eps_start, eps_end, eps_decay):
         scores.append(score)               # save most recent score
         eps = max(eps_end, eps_decay*eps)  # decrease epsilon
 
-        print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}')
+        print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}', flush=True)
+        sys.stdout.flush()
 
         if i_episode % 100 == 0:
             print(f'\rEpisode {i_episode}\tAverage Score: {np.mean(scores_window):.2f}')
 
         if np.mean(scores_window) >= 200.0:
             print(f'\nEnvironment solved in {i_episode-100:d} episodes!\tAverage Score: {np.mean(scores_window):.2f}')
-            # TODO: Add code to save the weights of the model
-            # torch.save(agent.model_local.state_dict(), 'checkpoint.pth')
+
+            # Save model
+            agent.model_local.save_weights('model/ddqn_weights')
             break
 
     return scores
-
 
