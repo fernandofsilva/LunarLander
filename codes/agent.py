@@ -52,10 +52,10 @@ class Agent:
         self.t_step = 0
 
     def __str__(self):
-        pass
+        return 'RL_Agent_Class'
 
     def __repr__(self):
-        pass
+        return 'RL_Agent_Class'
 
     def step(self, state, action, reward, next_state, done):
         """Save state on buffer and trigger learn according to update_every
@@ -172,10 +172,10 @@ class ReplayBuffer:
         self.experience = namedtuple("Experience", field_names=["state", "action", "reward", "next_state", "done"])
 
     def __str__(self):
-        pass
+        return 'Replay_Buffer_Class'
 
     def __repr__(self):
-        pass
+        return 'Replay_Buffer_Class'
 
     def __len__(self):
         """Return the current size of internal memory."""
