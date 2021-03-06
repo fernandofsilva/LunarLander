@@ -21,6 +21,10 @@ parser.add_argument('--tau', nargs='?', const=1, type=float, default=1e-3)
 parser.add_argument('--lr', nargs='?', const=1, type=float, default=5e-4)
 parser.add_argument('--update_every', nargs='?', const=1, type=int, default=4)
 
+# Parser parameters
+parser.add_argument("--mode", default='client')
+parser.add_argument("--port", default=52162)
+
 # Pass args
 args = parser.parse_args()
 
@@ -50,6 +54,6 @@ if __name__ == '__main__':
         n_episodes=args.n_episodes,
         max_t=args.max_t,
         eps_start=args.eps_start,
-        eps_end=args.eps_start,
-        eps_decay=args.eps_start
+        eps_end=args.eps_end,
+        eps_decay=args.eps_decay
     )
