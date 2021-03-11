@@ -48,7 +48,7 @@ Each parameter correspond to:
 Expected final output
 
 ```
-Episode 2000      Average Score: -197.81
+Episode 2000       Average Score: -197.81
 ```
 
 
